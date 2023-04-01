@@ -1,0 +1,401 @@
+:root {
+  --main-bg: #333;
+  --main-txt-clr: #fff;
+  --info-bg: #2196f3;
+  --alt-bg: #b8adad;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --main-bg: #fff;
+    --main-txt-clr: #333;
+    --info-bg: #009688;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--main-bg);
+  color: var(--main-txt-clr);
+}
+
+/* reusable components */
+.container {
+  padding-inline: 1rem;
+}
+
+/* small screens */
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+
+/* medium screens */
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+}
+
+/* large screens */
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
+}
+
+#game-title {
+  font-size: 2.5rem;
+  text-align: center;
+  margin: 0.5em auto;
+}
+
+.game-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem 2rem;
+  background-color: var(--info-bg);
+  color: #fff;
+}
+
+#game {
+  margin: 2rem auto;
+}
+
+.game-details {
+  display: flex;
+  gap: 2rem;
+}
+
+@media (max-width: 767px) {
+  .game-details {
+    flex-direction: column;
+  }
+}
+
+.game-draw {
+  --line-size: 4px;
+  --line-clr: #222;
+  --block-pad: 2rem;
+
+  position: relative;
+  width: 100%;
+  min-height: 20rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--alt-bg);
+}
+
+.game-draw > * {
+  position: absolute;
+}
+
+.stand,
+.hang,
+.rope,
+.head,
+.body,
+.hands,
+.legs {
+  opacity: 0;
+  transition: opacity 300ms ease-in-out;
+}
+
+.stand {
+  bottom: var(--block-pad);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20%;
+  height: var(--line-size);
+  background-color: var(--line-clr);
+}
+
+.hang {
+  bottom: var(--block-pad);
+  left: 50%;
+  transform: translateX(-50%);
+  height: calc(100% - (2 * var(--block-pad)));
+  width: var(--line-size);
+  background-color: var(--line-clr);
+}
+
+.hang::before,
+.hang::after {
+  content: "";
+  position: absolute;
+  top: 0.5rem;
+  background-color: var(--line-clr);
+}
+
+.hang::before {
+  left: 0;
+  width: 4rem;
+  height: var(--line-size);
+}
+
+.hang::after {
+  left: 4rem;
+  height: var(--block-pad);
+  width: var(--line-size);
+}
+
+.rope,
+.head {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: var(--line-size) dashed var(--line-clr);
+}
+
+.rope,
+.man {
+  --rope-size: 3.5rem;
+  --head-size: 2.5rem;
+  top: calc(2 * var(--block-pad) + 0.25rem);
+  left: calc(50% + 4rem);
+}
+
+.rope {
+  width: var(--rope-size);
+  transform: translateX(-50%);
+}
+
+.man {
+  transform: translate(
+    calc(0px - var(--head-size) / 2),
+    calc((var(--rope-size) - var(--head-size)) / 2)
+  );
+}
+
+.head {
+  width: var(--head-size);
+  top: 0;
+  left: 0;
+  position: absolute;
+  border-style: solid;
+}
+
+.head::before,
+.head::after {
+  content: "";
+  position: absolute;
+  top: 0.5rem;
+  width: var(--line-size);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-color: var(--line-clr);
+}
+
+.head::before {
+  left: calc(var(--head-size) / 2);
+}
+
+.head::after {
+  right: calc(var(--head-size) / 2);
+}
+
+.body {
+  width: var(--line-size);
+  background-color: var(--line-clr);
+  height: 5.5rem;
+  position: absolute;
+  left: calc(var(--head-size) / 2);
+  top: var(--head-size);
+  transform: translateX(-50%);
+}
+
+.hands::before,
+.hands::after {
+  top: 2rem;
+}
+
+.legs::before,
+.legs::after {
+  bottom: 0;
+}
+
+.hands::before,
+.hands::after,
+.legs::before,
+.legs::after {
+  content: "";
+  position: absolute;
+  left: calc(var(--line-size) / 2);
+  width: 3rem;
+  height: var(--line-size);
+  background-color: var(--line-clr);
+  transform-origin: left;
+}
+
+.hands::before {
+  transform: rotate(-150deg);
+}
+
+.legs::before {
+  transform: rotate(150deg);
+}
+
+.hands::after {
+  transform: rotate(-30deg);
+}
+
+.legs::after {
+  transform: rotate(30deg);
+}
+
+.game-draw.active-1 .stand {
+  opacity: 1;
+}
+
+.game-draw.active-2 .hang {
+  opacity: 1;
+}
+
+.game-draw.active-3 .rope {
+  opacity: 1;
+}
+
+.game-draw.active-4 .head {
+  opacity: 1;
+}
+
+.game-draw.active-5 .body {
+  opacity: 1;
+}
+
+.game-draw.active-6 .hands {
+  opacity: 1;
+}
+
+.game-draw.active-7 .legs {
+  opacity: 1;
+}
+
+.game-letters {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.letter {
+  background-color: var(--info-bg);
+  color: #fff;
+  padding: 0.35em 0.7em;
+  font-size: 1.125rem;
+  cursor: pointer;
+}
+
+.letter.done {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.word-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2rem auto;
+  padding: 1rem 0.5rem;
+  background-color: var(--info-bg);
+}
+
+.word-placeholder > li {
+  background-color: var(--main-bg);
+  color: var(--main-txt-clr);
+  font-weight: bold;
+  border-radius: 0.25em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 35px;
+  aspect-ratio: 1;
+}
+
+.word-placeholder > li.white-space {
+  opacity: 0.8;
+}
+
+.word-placeholder > li.white-space::before {
+  content: "";
+  width: 50%;
+  height: 10%;
+  background-color: currentColor;
+}
+
+/* popup styles */
+.pop-up {
+  position: absolute;
+  word-break: break-all;
+  left: 50%;
+  top: 50%;
+  width: 80vw;
+  padding: 2.5rem;
+  transition: transform 150ms linear;
+  background-color: #eee;
+  border-radius: 6px;
+  animation: pop-up 250ms cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+  z-index: 100;
+}
+
+.blur::before {
+  content: "";
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  backdrop-filter: blur(1.6px);
+  z-index: 1;
+}
+
+@keyframes pop-up {
+  from {
+    transform: translate(-50%, -50%) scale(0);
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.popup-msg {
+  font-size: 1.125rem;
+  text-align: center;
+}
+
+.confirm {
+  display: block;
+  margin: 1.5rem auto 0;
+  padding: 0.5em 1em;
+  font-size: 1rem;
+  color: #fff;
+  background-color: var(--info-bg);
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  border: none;
+  border-radius: 0.75em;
+  cursor: pointer;
+}
+
+.pop-up > .closeBtn:hover,
+.confirm:hover {
+  opacity: 0.85;
+}
